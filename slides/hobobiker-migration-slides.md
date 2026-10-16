@@ -421,6 +421,7 @@ Oct 23. Retire the site to static HTML following Karen Stevenson's Lullabot seri
 
 ## Resources / Sources
 
+* **Live today only**: [the working copy](https://hobobiker-copy--remotework--rfay.coder.ddev.com)
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
 * Files and sanitized database: [rfay/hobobiker-assets v1.0](https://github.com/rfay/hobobiker-assets/releases/tag/v1.0)
 * The kit: [github.com/rfay/site-migration-kit](https://github.com/rfay/site-migration-kit)
