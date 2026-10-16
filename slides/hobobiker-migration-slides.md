@@ -274,11 +274,13 @@ For each check: open the file it compares against, run a small subset, look at w
 
 ## What a test looks like
 
-* **semantic**: [the test](https://github.com/rfay/site-migration-kit/blob/8010d41/tests/semantic-suite.mjs#L62) · [the comparison](https://github.com/rfay/site-migration-kit/blob/8010d41/lib/compare.mjs#L18)
-* **layout**: [the test](https://github.com/rfay/site-migration-kit/blob/8010d41/tests/layout-suite.mjs#L34) · [the measurement](https://github.com/rfay/site-migration-kit/blob/8010d41/lib/layout.mjs#L164)
+From the rehearsal:
+
+* **semantic**: [the test](https://github.com/rfay/hobobiker.com/blob/rehearsal-baseline/test/playwright/tests/semantic.spec.ts) · [what it checks on one page](https://github.com/rfay/hobobiker.com/blob/rehearsal-baseline/test/playwright/baseline/semantic/pages/node__4196.json)
+* **layout**: [the test](https://github.com/rfay/hobobiker.com/blob/rehearsal-baseline/test/playwright/tests/layout.spec.ts) · [what it checks](https://github.com/rfay/hobobiker.com/blob/rehearsal-baseline/test/playwright/baseline/layout/layout.json)
 
 Note:
-One Playwright test per baseline page, generated from the baseline index. Semantic: fetch the page, extract text, images and links from the whole body (no selectors), and report what the baseline had that the target lacks. Layout: load the page in Chromium, find the content and sidebar by their text, measure position, width, colors and fonts, compare with wide tolerances.
+Each spec file is a few lines that hand off to the kit; Playwright then generates one test per baseline page (2,436). The per-page record is the real content: node 4196's file holds the rendered tripinfo table as lines of text, and the test checks every line is still there. Extra content on the target is fine, missing content fails and is named. Layout: content column, sidebar, colors and fonts per page, measured in Chromium, compared with wide tolerances. The kit code behind them, if anyone asks: semantic tests/semantic-suite.mjs and lib/compare.mjs, layout tests/layout-suite.mjs and lib/layout.mjs, in site-migration-kit.
 
 ---
 
