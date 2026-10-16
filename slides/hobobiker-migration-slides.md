@@ -427,7 +427,7 @@ Oct 23. Retire the site to static HTML following Karen Stevenson's Lullabot seri
 
 * **Live today only**: [the working copy](https://hobobiker-copy--remotework--rfay.coder.ddev.com)
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
-* Files and sanitized database: [rfay/hobobiker-assets v1.0](https://github.com/rfay/hobobiker-assets/releases/tag/v1.0)
+* Files and sanitized database: [rfay/hobobiker-assets v1.1](https://github.com/rfay/hobobiker-assets/releases/tag/v1.1)
 * The kit: [github.com/rfay/site-migration-kit](https://github.com/rfay/site-migration-kit)
 * [Playwright](https://playwright.dev) and the [ddev-playwright add-on](https://github.com/Lullabot/ddev-playwright)
 * [ddev.com](https://ddev.com)
