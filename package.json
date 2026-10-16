@@ -1,0 +1,15 @@
+{
+  "name": "presentation-template",
+  "version": "1.0.0",
+  "description": "A reveal.js presentation template",
+  "scripts": {
+    "start": "five-server --port=8000 --open=/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "five-server": "^0.5.0"
+  }
+}
