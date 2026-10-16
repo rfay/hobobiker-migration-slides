@@ -206,10 +206,10 @@ If reusing the kit on a new site needs a change anywhere else, that's a gap in t
 
 ---
 
-## The checks
+## The checks (or "Tiers")
 
-* **semantic**: nothing missing
-* **visible**: actually shown in a browser
+* **semantic**: nothing missing from text
+* **visible**: actually shown in a browser (playwright)
 * **layout**: same shape of page
 * **access**, **assets**, **static**, **stored**
 
