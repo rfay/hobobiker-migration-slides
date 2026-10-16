@@ -272,6 +272,16 @@ For each check: open the file it compares against, run a small subset, look at w
 
 ---
 
+## What a test looks like
+
+* **semantic**: [the test](https://github.com/rfay/site-migration-kit/blob/8010d41/tests/semantic-suite.mjs#L62) · [the comparison](https://github.com/rfay/site-migration-kit/blob/8010d41/lib/compare.mjs#L18)
+* **layout**: [the test](https://github.com/rfay/site-migration-kit/blob/8010d41/tests/layout-suite.mjs#L34) · [the measurement](https://github.com/rfay/site-migration-kit/blob/8010d41/lib/layout.mjs#L164)
+
+Note:
+One Playwright test per baseline page, generated from the baseline index. Semantic: fetch the page, extract text, images and links from the whole body (no selectors), and report what the baseline had that the target lacks. Layout: load the page in Chromium, find the content and sidebar by their text, measure position, width, colors and fonts, compare with wide tolerances.
+
+---
+
 ## semantic
 
 Is every line, image, link and menu item still there?
@@ -412,6 +422,7 @@ Oct 23. Retire the site to static HTML following Karen Stevenson's Lullabot seri
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
 * Files and sanitized database: [rfay/hobobiker-assets v1.0](https://github.com/rfay/hobobiker-assets/releases/tag/v1.0)
 * The kit: [github.com/rfay/site-migration-kit](https://github.com/rfay/site-migration-kit)
+* [Playwright](https://playwright.dev) and the [ddev-playwright add-on](https://github.com/Lullabot/ddev-playwright)
 * [ddev.com](https://ddev.com)
 
 Note:
