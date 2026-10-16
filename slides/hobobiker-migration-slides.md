@@ -263,12 +263,15 @@ Slow steps are pre-baked: the Playwright image build, the browser-based checks, 
 
 One question each
 
+The rehearsal's finished suite:
+
 ```bash
-ddev exec -d /var/www/html/test/playwright bash
+ddev exec -d \
+  /var/www/html/.tarballs/rehearsal/test/playwright bash
 ```
 
 Note:
-For each check: open the file it compares against, run a small subset, look at what a failure says. Every command below runs in that shell. (`ddev playwright` doesn't work on this project: the add-on assumes the container starts in the project root, and this project's working_dir is docroot.)
+While the live agent works on its own suite, switch to a second terminal with the rehearsal's (a git worktree of tag rehearsal-baseline, gitignored, with node_modules). For each check: open the file it compares against, run a small subset (each takes seconds), look at what a failure says. Every command below runs in that shell. Full runs are too slow to run live: show the saved logs instead, e.g. tail tmp/selfcheck2.log (10,613 passed, 4.4 m). Deliberate breaks, 16 s: node scripts/negative-controls.mjs, then tmp/run-controls.sh /tmp/hobo-static tmp/c.log (11 pass) and tmp/run-controls.sh /tmp/hobo-neg tmp/b.log (9 fail, each named; grep Error: tmp/b.log). (`ddev playwright` doesn't work on this project: the add-on assumes the container starts in the project root, and this project's working_dir is docroot.)
 
 ---
 
@@ -362,13 +365,14 @@ tests/assets.spec.ts. Hashes only; the 1.2 GB of files is not copied into the ba
 Does the archive stand alone?
 
 ```bash
-TEST_BASE_URL=<static site> \
-  MIGRATION_TARGET=static \
-  npx playwright test --grep "static:"
+MIGRATION_TARGET=static \
+  node kit/scripts/serve-static.mjs \
+  --dir /tmp/hobo-static \
+  --run "npx playwright test --grep static:"
 ```
 
 Note:
-Only for a static target, so it's next week's star. Fails a page that still refers to the old site, a dead internal URL, or an external URL the original didn't have.
+Only for a static target, so it's next week's star. Here it runs against the rehearsal's quick wget mirror in the container's /tmp (2,436 pass, 16 s; gone after a ddev restart). Fails a page that still refers to the old site, a dead internal URL, or an external URL the original didn't have.
 
 ---
 
@@ -379,7 +383,7 @@ Did the database keep what never rendered?
 `baseline/stored.json`
 
 ```bash
-# host, in test/playwright
+# host, in .tarballs/rehearsal/test/playwright
 node kit/scripts/stored-exporters/drupal6.mjs \
   --out tmp/now.json
 # container
