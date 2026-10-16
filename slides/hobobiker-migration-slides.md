@@ -259,6 +259,143 @@ Slow steps are pre-baked: the Playwright image build, the browser-based checks, 
 
 ---
 
+## Inside the checks
+
+One question each
+
+```bash
+ddev exec -d /var/www/html/test/playwright bash
+```
+
+Note:
+For each check: open the file it compares against, run a small subset, look at what a failure says. Every command below runs in that shell. (`ddev playwright` doesn't work on this project: the add-on assumes the container starts in the project root, and this project's working_dir is docroot.)
+
+---
+
+## semantic
+
+Is every line, image, link and menu item still there?
+
+`baseline/semantic/pages/node__4196.json`
+
+```bash
+npx playwright test --grep "semantic:.*@tripinfo"
+```
+
+Note:
+Node 4196 is a route page. Its stored body is one line of PHP; the baseline record holds the 23-row table it renders. The check is one-directional: extra content on the target is fine, missing content fails and is named.
+
+---
+
+## visible
+
+Can a visitor actually see it?
+
+```bash
+npx playwright test --grep "visible:.*@smoke"
+```
+
+Note:
+Real Chromium, innerText. The negative control hides one paragraph on node 3830 with CSS: semantic passes (the text is in the HTML), visible fails. Known limit: an email address written by document.write is in no baseline.
+
+---
+
+## layout
+
+Is the page the same shape?
+
+`baseline/layout/layout.json`
+
+```bash
+npx playwright test --grep "layout:.*@smoke"
+```
+
+Note:
+Not a pixel diff. Content column position and width, sidebar, header color, fonts, link color, measured in a browser, with wide tolerances. Catches a lost sidebar or a different theme.
+
+---
+
+## access
+
+Is private still private?
+
+81 unpublished paths, all 403
+
+```bash
+npx playwright test --grep "access:"
+```
+
+Note:
+tests/access.spec.ts and baseline/manifest.json ("unpublished"). For a static target 404 is accepted (a decision in expected-differences.json); a leaked page still fails with "expected 403, got 200".
+
+---
+
+## assets
+
+Same files, same bytes?
+
+1,770 SHA-256 hashes
+
+```bash
+npx playwright test --grep "asset:"
+```
+
+Note:
+tests/assets.spec.ts. Hashes only; the 1.2 GB of files is not copied into the baseline. Catches a file that went missing even when the page still links to it.
+
+---
+
+## static
+
+Does the archive stand alone?
+
+```bash
+TEST_BASE_URL=<static site> \
+  MIGRATION_TARGET=static \
+  npx playwright test --grep "static:"
+```
+
+Note:
+Only for a static target, so it's next week's star. Fails a page that still refers to the old site, a dead internal URL, or an external URL the original didn't have.
+
+---
+
+## stored
+
+Did the database keep what never rendered?
+
+`baseline/stored.json`
+
+```bash
+# host, in test/playwright
+node kit/scripts/stored-exporters/drupal6.mjs \
+  --out tmp/now.json
+# container
+STORED_TARGET_EXPORT=tmp/now.json \
+  MIGRATION_TARGET=drupal11 \
+  npx playwright test --grep "stored:.*@comments"
+```
+
+Note:
+Compares baseline/stored.json with an export of the target's database (here, the original again: 148 comment threads pass). Enforced for Drupal 11 only. The negative control deletes one comment: "comment 1163 on node 4123 by Javier Martin is missing".
+
+---
+
+## baseline
+
+Did the baseline catch the hard parts?
+
+`tests/baseline-sanity.spec.ts`
+
+```bash
+npx playwright test --grep "baseline:"
+```
+
+Note:
+Tests the baseline itself, not a target: tripinfo tables rendered (not PHP), every hobophoto page has images, empty-module pages recorded, no comments rendered, stored snapshot complete. A broken baseline would make every target look good.
+
+---
+
 ## Next week
 
 **The Last Ride**: static HTML
@@ -270,7 +407,12 @@ Oct 23. Retire the site to static HTML following Karen Stevenson's Lullabot seri
 
 ---
 
-## Links
+## Resources / Sources
 
-* [github.com/rfay/site-migration-kit](https://github.com/rfay/site-migration-kit)
+* Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
+* Files and sanitized database: [rfay/hobobiker-assets v1.0](https://github.com/rfay/hobobiker-assets/releases/tag/v1.0)
+* The kit: [github.com/rfay/site-migration-kit](https://github.com/rfay/site-migration-kit)
 * [ddev.com](https://ddev.com)
+
+Note:
+The assets release imports with the standard ddev import-db and ddev import-files, so anyone can reproduce this on their own machine.
