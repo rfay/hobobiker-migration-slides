@@ -35,15 +35,15 @@ Tag s1-baseline-frozen. The suite doesn't know or care how today's target is bui
 
 ---
 
-## Credit: Karen Stevenson, Lullabot
+## Credit: Karen Stevenson
 
-*Sending a Drupal Site Into Retirement* (2020)
+*Sending a Drupal Site Into Retirement*, Lullabot, 2020
 
-> "One of the biggest problems of transforming a dynamic site into static pages is that the URLs must change."
+> "One of the biggest problems of transforming a dynamic site into static pages is that the URLs must change." <!-- .element: style="font-size: 0.6em" -->
 
 * Bare file host: `/a/b.html` or `/a/b/`
-* GitHub or Cloudflare Pages: `/a/b` works; `?page=2` doesn't
-* A few lines of nginx or Apache: every old URL, even `?page=2`
+* GitHub, Cloudflare Pages: `/a/b`, but not `?page=2`
+* nginx or Apache: every URL, even `?page=2`
 
 Note:
 Three articles: the approach, HTTrack, and the Static Generator module. Drupal 7 and GitHub Pages, but the thinking carries over. Our archive runs on nginx with one try_files line: /central_america_blog and /central_america_blog.html both answer, and so does /blog?page=1 (saved as the file "blog?page=1.html"). The archive's own links use the .html form because wget rewrote them; old bookmarks and search results use the bare form and still land. Plain static hosts ignore the query string, so /blog?page=1 would quietly show page 1; there the paginated URLs are the ones that really change, unless pagination is removed, as Karen suggests. The suite requests every URL exactly as the original served it, so it tells you which URLs a hosting choice breaks. Links on the last slide.
@@ -80,11 +80,10 @@ Prep changes are deliberate losses, so they never touch the reference. A prep co
 
 ---
 
-## The crawl is not self-contained
+## It still links to the old site
 
-Every content check passes, and the archive still points at the old site
-
-The `static` check and a rewrite step fix that
+* Every content check passes, yet pages point back at the site we're retiring
+* The `static` check finds those links; a rewrite step fixes them
 
 Note:
 A crawler rewrites links only to pages it downloaded. The static check fails a page that refers to the crawled site, a dead internal URL, or an external URL the original didn't have. rewrite-static.mjs makes the rest relative and prints a count per decision: 291 of 2,454 pages changed.
