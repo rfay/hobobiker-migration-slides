@@ -15,15 +15,12 @@ Today we turn hobobiker.com into a folder of plain HTML files, and use last week
 
 A PHP bug this week lets one request run code on a server
 
-These demo sites are public, so:
-
-* All three run fixed PHP
-* DDEV PR: `/phpstatus` no longer reachable from outside
+These demo sites are public, so all three run fixed PHP
 
 [ddev.com: what DDEV users need to know](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)
 
 Note:
-CVE-2026-109618 and 109619, fixed in PHP 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12 on Oct 21. Local DDEV projects aren't reachable from the internet, but these run on a Coder workspace with public URLs. The two Drupal 6 sites run PHP 7.3: the version number doesn't change, so check `ddev php -v` for "built: Oct 21 2026". The static site got the blog's Dockerfile.php2shell (8.4.27). Checking which requests reach PHP turned up /phpstatus: every DDEV webserver passed it to php-fpm from anywhere, and php-fpm parses the request before it knows it's a status request. Fixed in ddev/ddev#9006 (issue #9005).
+CVE-2026-109618 and 109619, fixed in PHP 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12 on Oct 21. Local DDEV projects aren't reachable from the internet, but these run on a Coder workspace with public URLs. The two Drupal 6 sites run PHP 7.3: the version number doesn't change, so check `ddev php -v` for "built: Oct 21 2026". The static site got the blog's Dockerfile.php2shell (8.4.27).
 
 ---
 
