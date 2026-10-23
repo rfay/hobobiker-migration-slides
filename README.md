@@ -4,8 +4,12 @@ Slides for **Hobobiker Rides Again**, a three-part live series in which hobobike
 migrated to static HTML and to Drupal 11 with Claude, using
 [site-migration-kit](https://github.com/rfay/site-migration-kit).
 
-**[View the slides](https://rfay.github.io/hobobiker-migration-slides/)**
+| Part | Slides | Deck source |
+|---|---|---|
+| 1. Road Test (Oct 16) | **[View](https://rfay.github.io/hobobiker-migration-slides/)** | `slides/hobobiker-migration-slides.md`, page `index.html` |
+| 2. The Last Ride (Oct 23) | **[View](https://rfay.github.io/hobobiker-migration-slides/part2.html)** | `slides/part2-the-last-ride.md`, page `part2.html` |
 
-The deck is `slides/hobobiker-migration-slides.md` ([reveal.js](https://revealjs.com/) Markdown;
-press `S` for speaker notes). Preview locally with `npm start` (http://localhost:8000). Pushing to
-`main` deploys to GitHub Pages.
+The decks are [reveal.js](https://revealjs.com/) Markdown; press `S` for speaker notes. Preview locally
+with `npm start` and open http://localhost:8000 (Part 1) or http://localhost:8000/part2.html (Part 2).
+Pushing to `main` deploys to GitHub Pages. A new part's page must also be copied into the site in
+`.github/workflows/deploy.yml`.
