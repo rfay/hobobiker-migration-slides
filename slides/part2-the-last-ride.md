@@ -67,18 +67,16 @@ Survey the site before applying the list. The crawl of the unprepared copy shows
 
 ---
 
-## Three sites, one command
+## Three sites, five steps
 
-| Project | Role |
-|---|---|
-| `hobobiker-copy` | the original, never touched |
-| `hobobiker-prep` | restored, then prepared by scripts |
-| `hobobiker-static` | the crawled HTML |
-
-restore → prepare → crawl → rewrite → verify
+1. **Restore** `hobobiker-prep` from the pristine dump
+2. **Prepare** it: turn off search
+3. **Crawl** it into `hobobiker-static`
+4. **Rewrite** the crawl's links
+5. **Check** `hobobiker-static` against the baseline from `hobobiker-copy`
 
 Note:
-Prep changes are deliberate losses, so they never touch the reference. A prep copy restored from the pristine dump every time can't drift. Rehearsal timings: restore 20 s, crawl about 2 minutes, rewrite 5 s, fast checks 52 s.
+The original, hobobiker-copy, is only the reference: the baseline came from it, and nothing changes it. Prep changes are deliberate losses, so they happen on hobobiker-prep, and restoring it from the pristine dump every time means it can't drift. hobobiker-static just serves the crawl. Rehearsal timings: restore 20 s, crawl about 2 minutes, rewrite 5 s, fast checks 52 s.
 
 ---
 
