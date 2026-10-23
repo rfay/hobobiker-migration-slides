@@ -39,9 +39,11 @@ Tag s2-baseline-frozen. The suite doesn't know or care how today's target is bui
 
 ## Karen's Retirement Technique
 
-*Sending a Drupal Site Into Retirement*, Karen Stephenson, 2020
+*[Sending a Drupal Site Into Retirement](https://www.lullabot.com/articles/sending-a-drupal-site-into-retirement)*, Karen Stephenson, 2020
 
 > "One of the biggest problems of transforming a dynamic site into static pages is that the URLs must change." <!-- .element: style="font-size: 0.6em" -->
+
+Today there are alternatives, so this isn't necessarily a problem.
 
 * Bare file host: `/a/b.html` or `/a/b/`
 * GitHub, Cloudflare Pages: `/a/b`, but not `?page=2`
@@ -54,7 +56,7 @@ Three articles: the approach, HTTrack, and the Static Generator module. Drupal 7
 
 ## Prepare before you crawl
 
-Karen's checklist, checked against this site:
+Karen's checklist, checked against this hobobiker:
 
 **To do:** turn off search · clear caches
 
@@ -67,7 +69,7 @@ Survey the site before applying the list. The crawl of the unprepared copy shows
 
 ---
 
-## Three sites, five steps
+## Three projects, five steps
 
 1. **Restore** `hobobiker-prep` from the pristine dump (hobobiker-copy)
 2. **Prepare** it: turn off search, flush cache
