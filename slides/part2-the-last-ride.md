@@ -44,8 +44,12 @@ Tag s1-baseline-frozen. The suite doesn't know or care how today's target is bui
 
 > "One of the biggest problems of transforming a dynamic site into static pages is that the URLs must change."
 
+* Bare file host: `/a/b.html` or `/a/b/`
+* GitHub or Cloudflare Pages: `/a/b` works; `?page=2` doesn't
+* A few lines of nginx or Apache: every old URL, even `?page=2`
+
 Note:
-Three articles: the approach, HTTrack, and the Static Generator module. Drupal 7 and GitHub Pages, but the thinking carries over. Our checks treat /a/b, /a/b.html and /a/b/index.html as the same page, and nginx answers the extensionless URL, so old links keep working. Links on the last slide.
+Three articles: the approach, HTTrack, and the Static Generator module. Drupal 7 and GitHub Pages, but the thinking carries over. Our archive runs on nginx with one try_files line: /central_america_blog and /central_america_blog.html both answer, and so does /blog?page=1 (saved as the file "blog?page=1.html"). The archive's own links use the .html form because wget rewrote them; old bookmarks and search results use the bare form and still land. Plain static hosts ignore the query string, so /blog?page=1 would quietly show page 1; there the paginated URLs are the ones that really change, unless pagination is removed, as Karen suggests. The suite requests every URL exactly as the original served it, so it tells you which URLs a hosting choice breaks. Links on the last slide.
 
 ---
 
