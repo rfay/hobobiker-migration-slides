@@ -69,6 +69,19 @@ Survey the site before applying the list. The crawl of the unprepared copy shows
 
 ---
 
+## The three projects
+
+Live during the session:
+
+* Original (Drupal 6): [hobobiker-copy](https://hobobiker-copy--remotework--rfay.coder.ddev.com)
+* Prepared copy: [hobobiker-prep](https://hobobiker-prep--remotework--rfay.coder.ddev.com)
+* Static archive: [hobobiker-static](https://hobobiker-static--remotework--rfay.coder.ddev.com)
+
+Note:
+Three sibling DDEV projects in one Coder workspace, each with a public URL during the session; they go away afterwards. The same links are in the github.com/rfay/hobobiker.com README.
+
+---
+
 ## Three projects, five steps
 
 1. **Restore** `hobobiker-prep` from the pristine dump (hobobiker-copy)
@@ -121,6 +134,7 @@ Pre-baked: the crawl and the browser checks. Tag at the end: s2-static-green. Ne
 
 ## Resources
 
+* Live during the session: [original](https://hobobiker-copy--remotework--rfay.coder.ddev.com) · [prep](https://hobobiker-prep--remotework--rfay.coder.ddev.com) · [static](https://hobobiker-static--remotework--rfay.coder.ddev.com)
 * Karen Stevenson: [The approach](https://www.lullabot.com/articles/sending-a-drupal-site-into-retirement) · [HTTrack](https://www.lullabot.com/articles/sending-drupal-site-retirement-using-httrack) · [Static Generator](https://www.lullabot.com/articles/sending-drupal-site-retirement-using-static-generation-module)
 * [PHP2Shell and DDEV](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
