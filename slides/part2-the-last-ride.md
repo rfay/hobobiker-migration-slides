@@ -7,13 +7,15 @@ Retiring a site to static HTML
 ![DDEV Logo](images/ddev-logo.svg)
 
 Note:
-Today we turn hobobiker.com into a folder of plain HTML files, and use last week's suite to prove nothing was lost.
+Today we turn hobobiker.com into a folder of plain HTML files, and use last week's test suite to prove nothing was lost.
 
 ---
 
 ## First: PHP2Shell
 
-A PHP bug this week lets one request run code on a server
+A PHP vulnerability this week lets one request run code on a server
+
+You already know this, but fix your servers YESTERDAY.
 
 These demo sites are public, so all three run fixed PHP
 
@@ -31,7 +33,7 @@ CVE-2026-109618 and 109619, fixed in PHP 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12 on Oc
 * 7 of 7 deliberate breaks caught
 
 Note:
-Tag s1-baseline-frozen. The suite doesn't know or care how today's target is built.
+Tag s2-baseline-frozen. The suite doesn't know or care how today's target is built.
 
 ---
 
