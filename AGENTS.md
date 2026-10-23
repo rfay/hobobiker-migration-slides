@@ -1,8 +1,9 @@
 # AGENTS.md
 
-This file provides guidance to AI coding agents when working with code in this repository.
+Slides for **Hobobiker Rides Again**, a three-part live series migrating hobobiker.com (Drupal 6)
+to static HTML and to Drupal 11 with Claude. reveal.js, Markdown decks, published to GitHub Pages.
 
-## Communication Style
+## Communication style
 
 - Use direct, concise language without unnecessary adjectives or adverbs
 - Avoid flowery or marketing-style language ("tremendous", "dramatically", "revolutionary", etc.)
@@ -10,37 +11,36 @@ This file provides guidance to AI coding agents when working with code in this r
 - State facts and findings directly without embellishment
 - Skip introductory phrases like "I'm excited to", "I'd be happy to", "Let me dive into"
 
-## Project Overview
+## Layout
 
-This repository is a template for creating reveal.js presentations. It provides a starting point for building presentation slides with GitHub Pages deployment.
+| Part | Deck | Page | Published at |
+|---|---|---|---|
+| 1. Road Test (Oct 16) | `slides/hobobiker-migration-slides.md` | `index.html` | https://rfay.github.io/hobobiker-migration-slides/ |
+| 2. The Last Ride (Oct 23) | `slides/part2-the-last-ride.md` | `part2.html` | https://rfay.github.io/hobobiker-migration-slides/part2.html |
 
-## Template Customization Checklist
+- Each part has its own page, a copy of `index.html` with a different `data-markdown` file and
+  `<title>`. A new page must also be added to the `cp` lines in `.github/workflows/deploy.yml`, or
+  it 404s on the published site.
+- Slides are separated by a line containing only `---`; speaker notes start with `Note:`.
+- Pushing to `main` deploys. Preview locally with `npm start`: http://localhost:8000 and
+  http://localhost:8000/part2.html. In the Coder workspace the same server is at
+  https://8000--main--remotework--rfay.coder.ddev.com (private unless the port is shared publicly).
 
-When creating a new presentation from this template, update:
+## Writing slides
 
-- `index.html`: Change the `<title>` tag and the `data-markdown` slide filename
-- `slides/`: Rename and edit the markdown slide file to match your presentation
-- `README.md`: Update the title, description, and live presentation URL
-- `package.json`: Update the `name` field
-- `css/custom.css`: Adjust branding colors and styles as needed
+- **Few, terse slides.** A slide carries a heading and a handful of short lines; the detail and the
+  numbers' context go in the `Note:` block. A part is about a dozen slides, not two dozen.
+- **Numbers come from measured runs**, not estimates: the hobobiker repo's `DISCOVERIES.md` and the
+  kit's `webinar/PLAN.md` and `docs/`. Say which run they came from in the note.
+- Credit sources by name and link them on the Resources slide (Karen Stevenson's Lullabot series for
+  Part 2).
+- Related repos: the site, `~/workspace/hobo/hobobiker-copy` (github.com/rfay/hobobiker.com); the kit,
+  `~/workspace/site-migration-kit`. The site's README links these decks; keep the links in step.
 
-## Development Notes
+## Git
 
-### Branch Naming
-
-Use descriptive branch names that include:
-
-- Date in YYYYMMDD format
-- Your GitHub username  
-- Brief description of the work
-
-Format: `YYYYMMDD_<username>_<short_description>`
-
-### Branch Creation Strategy
-
-```bash
-git fetch upstream && git checkout -b <branch_name> upstream/main --no-track
-```
+Commit only when asked, and only the files for the change: leave unrelated edits (such as
+`package-lock.json`) out. Never push; the maintainer pushes.
 
 ## Important Instruction Reminders
 
