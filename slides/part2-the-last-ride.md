@@ -55,12 +55,16 @@ Three articles: the approach, HTTrack, and the Static Generator module. Drupal 7
 
 ## Prepare before you crawl
 
-Forms, search, logins, comments: what can't work statically goes first
+Karen's checklist, checked against this site:
 
-**Survey this site** before applying the list
+**To do:** turn off search · clear caches
+
+**Already done or absent:** comments · contact form · login and author links · shortlinks · AJAX and filters
+
+**Kept:** feeds, as frozen snapshots
 
 Note:
-On randyfay.com the checklist came down to two steps, and "disable comments" would have deleted 670 real comments. On hobobiker the comment module is already off. One prep step we know we need: clear Drupal's caches. A cached rendering had the original's Coder hostname baked in, and the crawl copied it.
+Survey the site before applying the list. The crawl of the unprepared copy shows what's there: the search box is the only form in the whole archive (home page only, posting to index.html). Turning search off removes its block, and that absence is declared in expected-differences.json. Clearing caches: a cached rendering had the original's Coder hostname baked in, and the crawl copied it; the pristine restore clears caches anyway. Already done: the comment module is off (the 5 "leave a comment" links were already 404 on the original), the contact module is off (contact.html is a plain page), and there are no login, register or author links, no shortlink or generator tags, no AJAX or exposed filters. Feeds keep working as snapshots that never update. On randyfay.com, by contrast, "disable comments" would have deleted 670 real comments.
 
 ---
 
@@ -104,11 +108,12 @@ No-preparation control run, this morning. The first run had 320 failures: the ca
 * **81** private pages: 404 instead of 403
 * **26** old `.htm` files: wget rewrote their links
 * **5** links to `/mexico/`: a folder with no index
+* The search block: removed on purpose
 
 Each one fixed, or declared with a reason
 
 Note:
-404 vs 403: both private; declared for the static target only, so Drupal 11 still needs 403, and a leaked page still fails. The .htm files: keep them byte for byte or declare it. /mexico/: old hand-made photo pages link with a trailing slash. expected-differences.json, every entry reviewed at the end.
+404 vs 403: both private; declared for the static target only, so Drupal 11 still needs 403, and a leaked page still fails. The .htm files: keep them byte for byte or declare it. /mexico/: old hand-made photo pages link with a trailing slash. Search: the prep step turns it off, so the home page loses its search block; one entry, as narrow as its reason. expected-differences.json, every entry reviewed at the end.
 
 ---
 
