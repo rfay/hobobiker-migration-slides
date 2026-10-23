@@ -37,9 +37,9 @@ Tag s2-baseline-frozen. The suite doesn't know or care how today's target is bui
 
 ---
 
-## Credit: Karen Stevenson
+## Karen's Retirement Technique
 
-*Sending a Drupal Site Into Retirement*, Lullabot, 2020
+*Sending a Drupal Site Into Retirement*, Karen Stephenson, 2020
 
 > "One of the biggest problems of transforming a dynamic site into static pages is that the URLs must change." <!-- .element: style="font-size: 0.6em" -->
 
@@ -69,9 +69,9 @@ Survey the site before applying the list. The crawl of the unprepared copy shows
 
 ## Three sites, five steps
 
-1. **Restore** `hobobiker-prep` from the pristine dump
-2. **Prepare** it: turn off search
-3. **Crawl** it into `hobobiker-static`
+1. **Restore** `hobobiker-prep` from the pristine dump (hobobiker-copy)
+2. **Prepare** it: turn off search, flush cache
+3. **Crawl** it into `hobobiker-static` with wget
 4. **Rewrite** the crawl's links
 5. **Check** `hobobiker-static` against the baseline from `hobobiker-copy`
 
@@ -80,22 +80,13 @@ The original, hobobiker-copy, is only the reference: the baseline came from it, 
 
 ---
 
-## It still links to the old site
+## Bug: Explicit links to hobobiker-copy or hobobiker.com
 
 * Every content check passes, yet pages point back at the site we're retiring
 * The `static` check finds those links; a rewrite step fixes them
 
 Note:
 A crawler rewrites links only to pages it downloaded. The static check fails a page that refers to the crawled site, a dead internal URL, or an external URL the original didn't have. rewrite-static.mjs makes the rest relative and prints a count per decision: 291 of 2,454 pages changed.
-
----
-
-## Rehearsal: 6,677 pass, 112 fail
-
-Every content page passes
-
-Note:
-No-preparation control run, this morning. The first run had 320 failures: the cached Coder hostname, and the kit's nginx rule not serving files without an extension (RSS feeds, old cache files). Both fixed. What's left are the decisions on the next slide.
 
 ---
 
@@ -135,4 +126,4 @@ Pre-baked: the crawl and the browser checks. Tag at the end: s2-static-green. Ne
 * [ddev.com](https://ddev.com)
 
 Note:
-Live during the session only: the three sites, linked from the hobobiker.com README.
+Live during the session only: the three sites, linked from the github.com/rfay/hobobiker.com README.
