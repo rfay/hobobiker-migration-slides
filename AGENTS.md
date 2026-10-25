@@ -17,13 +17,14 @@ to static HTML and to Drupal 11 with Claude. reveal.js, Markdown decks, publishe
 |---|---|---|---|
 | 1. Road Test (Oct 16) | `slides/hobobiker-migration-slides.md` | `index.html` | https://rfay.github.io/hobobiker-migration-slides/ |
 | 2. The Last Ride (Oct 23) | `slides/part2-the-last-ride.md` | `part2.html` | https://rfay.github.io/hobobiker-migration-slides/part2.html |
+| 3. The Long Haul (Oct 30) | `slides/part3-the-long-haul.md` | `part3.html` | https://rfay.github.io/hobobiker-migration-slides/part3.html |
 
 - Each part has its own page, a copy of `index.html` with a different `data-markdown` file and
   `<title>`. A new page must also be added to the `cp` lines in `.github/workflows/deploy.yml`, or
   it 404s on the published site.
 - Slides are separated by a line containing only `---`; speaker notes start with `Note:`.
 - Pushing to `main` deploys. Preview locally with `npm start`: http://localhost:8000 and
-  http://localhost:8000/part2.html. In the Coder workspace the same server is at
+  http://localhost:8000/part2.html (and part3.html). In the Coder workspace the same server is at
   https://8000--main--remotework--rfay.coder.ddev.com (private unless the port is shared publicly).
 
 ## Writing slides
