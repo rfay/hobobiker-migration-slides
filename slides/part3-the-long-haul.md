@@ -14,11 +14,59 @@ Same site, same test suite, a very different target: a working Drupal 11 site wi
 ## Last week
 
 * The static archive is live: [static.hobobiker.com](https://static.hobobiker.com)
+  (GitHub Pages, [rfay/hobobiker-static](https://github.com/rfay/hobobiker-static))
 * **11,679** checks pass, 0 fail
-* Found on the way: credentials and personal data in published copies
+* But not on the first try...
 
 Note:
-Final local run of retire/run.sh, every tier, against the nginx-served archive (DISCOVERIES.md, "Part 2 re-run after the cleanup"). GitHub Pages serves it at the custom domain from rfay/hobobiker-static. The secrets: an AWS key in a Backup and Migrate destination, a Google Maps key, and personal data in three map XML files. drush sql-sanitize only scrubs users. All rotated or removed; the maps now use Leaflet. The pipeline now has a secrets gate, and the sanitized database and files are hobobiker-assets v1.2.
+Final local run of retire/run.sh, every tier, against the nginx-served archive (DISCOVERIES.md, "Part 2 re-run after the cleanup"). GitHub Pages serves it at the custom domain from rfay/hobobiker-static. The next two slides are what happened between that first green run and this one.
+
+---
+
+## Confession 1: I changed the original
+
+* The maps were broken: a dead Google Maps key
+* **434** day maps, **13** route maps
+* Fixed on production: Leaflet + OpenStreetMap, no key
+* Baseline re-frozen to match
+
+Note:
+"Reproduce, don't repair" is the rule for the migration, but the owner can still fix the site itself. The Google key belonged to a project with no billing, so every map had been blank for years. 13 route maps had a second bug: a leftover debugging line put https://hobobiker.com/ in front of an absolute URL, so the KML never loaded. The repair is in the tripinfo module: each map is a div with a site-relative data-kml URL, drawn by Leaflet 1.9.4 with togeojson and JSZip, all served locally. Because the original changed on purpose, the old baseline no longer described it: re-frozen 2026-10-25, the old one stays in git history.
+
+---
+
+## Confession 2: secrets in public
+
+* Personal data in 3 map files: names, addresses, phone numbers
+* An AWS key, a dead Google key, SMTP and Flickr credentials
+* Published in the archive repo and the data release
+* Revoked, deleted, and started over
+
+Note:
+The personal data: Warm Showers hosts and family contacts in XML files under files/maps, about 75 phone numbers. The credentials were in the variable table and, the worst one, an AWS access key inside a Backup and Migrate destination URL. drush sql-sanitize only scrubs users, not these. All of it was public in rfay/hobobiker-static and in hobobiker-assets v1.0 and v1.1. What it took: rotate the AWS key and delete the old one, delete the Flickr app and every credential variable, delete both GitHub repos, remove the files from production. Then a sanitized snapshot with a gate that searches every table and file for keys, a re-frozen baseline, a secrets gate in the static pipeline, and the whole archive rebuilt, retested (11,679 pass, 0 fail) and redeployed. The data is now hobobiker-assets v1.2. Lesson: the audit has to look at every table, not just users and variables.
+
+---
+
+## Confession 3: I didn't design the tests
+
+Part 1's prompt asked for a plan and a way to test it
+
+* Claude proposed the tiers and built them
+* I reviewed them; I never specified them
+
+Note:
+Last week's question: "What if you just asked Claude to do this without the tests?" It would do something, and say it was done. Without a check, "done" is the agent's word; with the baseline, it is a count anyone can rerun. Part 1's recap on drupal.org is linked on the last slide.
+
+---
+
+## DDEV v1.25.5: upgrade
+
+* PHP security fixes, among other things
+* `ddev import-db` and `ddev export-db` handle **`.zst`**
+* So from now on we use `.zst` dumps
+
+Note:
+Everyone should upgrade. Zstandard dumps are smaller and much faster to compress and decompress than gzip; hobobiker-assets v1.2 ships both db.sql.gz and db.sql.zst. The workspace for this series runs v1.25.5.
 
 ---
 
@@ -139,7 +187,8 @@ Pre-baked checkpoints for the long steps (file copy, a full import). Whatever pa
 
 ## Resources
 
-* Archive: [static.hobobiker.com](https://static.hobobiker.com) · data: [hobobiker-assets v1.2](https://github.com/rfay/hobobiker-assets/releases/tag/v1.2)
+* Archive: [static.hobobiker.com](https://static.hobobiker.com), from [rfay/hobobiker-static](https://github.com/rfay/hobobiker-static) · data: [hobobiker-assets v1.2](https://github.com/rfay/hobobiker-assets/releases/tag/v1.2)
+* Recaps on drupal.org: [Part 1](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-16-%E2%80%94-part-1-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-road-test-having-claude) · [Part 2](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-23-%E2%80%94-part-2-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-the-last-ride-sending-a)
 * Live during the session: [original](https://hobobiker-copy--remotework--rfay.coder.ddev.com) · [Drupal 11](https://hobobiker-d11--remotework--rfay.coder.ddev.com)
 * [Drupal migrations from Drupal 6/7](https://www.drupal.org/docs/upgrading-drupal)
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)

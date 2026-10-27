@@ -4,6 +4,9 @@ Slides for **Hobobiker Rides Again**, a three-part live series in which hobobike
 migrated to static HTML and to Drupal 11 with Claude, using
 [site-migration-kit](https://github.com/rfay/site-migration-kit).
 
+The static archive from Part 2 is at <https://static.hobobiker.com>, published with GitHub Pages from
+[rfay/hobobiker-static](https://github.com/rfay/hobobiker-static).
+
 | Part | Slides | Deck source |
 |---|---|---|
 | 1. Road Test (Oct 16) | **[View](https://rfay.github.io/hobobiker-migration-slides/)** | `slides/hobobiker-migration-slides.md`, page `index.html` |

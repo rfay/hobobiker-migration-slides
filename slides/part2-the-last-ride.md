@@ -135,6 +135,7 @@ Pre-baked: the crawl and the browser checks. Tag at the end: s2-static-green. Ne
 ## Resources
 
 * Live during the session: [original](https://hobobiker-copy--remotework--rfay.coder.ddev.com) · [prep](https://hobobiker-prep--remotework--rfay.coder.ddev.com) · [static](https://hobobiker-static--remotework--rfay.coder.ddev.com)
+* The result, permanently: [static.hobobiker.com](https://static.hobobiker.com), from [rfay/hobobiker-static](https://github.com/rfay/hobobiker-static)
 * Karen Stevenson: [The approach](https://www.lullabot.com/articles/sending-a-drupal-site-into-retirement) · [HTTrack](https://www.lullabot.com/articles/sending-drupal-site-retirement-using-httrack) · [Static Generator](https://www.lullabot.com/articles/sending-drupal-site-retirement-using-static-generation-module)
 * [PHP2Shell and DDEV](https://ddev.com/blog/php2shell-what-ddev-users-need-to-know/)
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
