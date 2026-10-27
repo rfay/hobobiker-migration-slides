@@ -143,7 +143,7 @@ The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 sour
 Every step a script, every script prints a count
 
 Note:
-Same shape as Part 2: always from a clean restore, never by hand-editing the target, so the run that goes green is reproducible. Configuration lives in git (config export or a recipe). Content types stay as on the original (triplog, blog...) rather than collapsing into one, as the audit suggests for a Drupal target.
+The source here is a copy of the original's database in a second schema of the target's database. Reading the source directly works too, and is common: DDEV projects share a network, so the target's web container reaches the original with mysql -h hobobiker-copy-db (ddev mysql -h does not). Same shape as Part 2: always from a clean restore, never by hand-editing the target, so the run that goes green is reproducible. Configuration lives in git (config export or a recipe). Content types stay as on the original (triplog, blog...) rather than collapsing into one, as the audit suggests for a Drupal target.
 
 ---
 
