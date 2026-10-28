@@ -91,7 +91,7 @@ Fresh install from the recommended project template. The original, hobobiker-cop
 * The `static:` tier no longer applies
 
 Note:
-Last week's static-only decisions (404 for private pages, the removed search block) are scoped to the static target, so they don't excuse anything here. The stored tier compares the database, not the pages: comments never render on the original (module off), but a CMS rebuild that drops them is a loss. It needs a Drupal 11 exporter; the kit has only drupal6.mjs so far.
+Last week's static-only decisions (404 for private pages, the removed search block) are scoped to the static target, so they don't excuse anything here. The stored tier compares the database, not the pages: comments never render on the original (module off), but a CMS rebuild that drops them is a loss. The kit now has a Drupal 11 exporter (scripts/stored-exporters/drupal11.mjs, kit 7db0c15), tested with a broken copy: one comment deleted and one title changed in the Drupal 11 database, both named.
 
 ---
 
@@ -117,7 +117,7 @@ Content made at render time, not stored:
 * **13** Flash pages, broken already
 
 Note:
-Counts are the baseline's tags. The site is frozen, so one-time answers are fine: flatten the tripinfo tables to HTML once (the audit's recommendation), and either recreate a small hobophoto filter or expand the macros to markup. Flash stays as broken as it is on the original: reproduce, don't repair. The baseline already holds the rendered output of all of these, so the suite tells us whether the answer worked.
+Counts are the baseline's tags. The site is frozen, so one-time answers are fine: flatten the tripinfo tables to HTML once (the audit's recommendation), and either recreate a small hobophoto filter or expand the macros to markup. Flash stays as broken as it is on the original: reproduce, don't repair. The baseline already holds the rendered output of all of these, so the suite tells us whether the answer worked. Rehearsed: no PHP runs on Drupal 11. Every PHP block was one call, tripinfo_table('START','END'); the import rewrites it to [tripinfo:START,END], a text filter in a small custom module. The photo macros stay in the stored text and a Drupal 11 filter plugin renders them with the original's markup.
 
 ---
 
@@ -129,7 +129,7 @@ Counts are the baseline's tags. The site is frozen, so one-time answers are fine
 Either is fine: the tests judge the result, not the method
 
 Note:
-The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 source and long, staged migrations. A script suits one cutover and odd content; randyfay.com went that way (126 nodes, 670 comments, 33 files in about 8 seconds). No 6-to-7-to-8 upgrade chain either way. Which one we use comes out of the plan.
+The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 source and long, staged migrations. A script suits one cutover and odd content; randyfay.com went that way (126 nodes, 670 comments, 33 files in about 8 seconds). No 6-to-7-to-8 upgrade chain either way. Which one we use comes out of the plan. Rehearsed with scripts, as on randyfay.com: the original ids kept, so node/N and every alias still work.
 
 ---
 
@@ -143,7 +143,7 @@ The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 sour
 Every step a script, every script prints a count
 
 Note:
-The source here is a copy of the original's database in a second schema of the target's database. Reading the source directly works too, and is common: DDEV projects share a network, so the target's web container reaches the original with mysql -h hobobiker-copy-db (ddev mysql -h does not). Same shape as Part 2: always from a clean restore, never by hand-editing the target, so the run that goes green is reproducible. Configuration lives in git (config export or a recipe). Content types stay as on the original (triplog, blog...) rather than collapsing into one, as the audit suggests for a Drupal target.
+The source here is a copy of the original's database in a second schema of the target's database. Reading the source directly works too, and is common: DDEV projects share a network, so the target's web container reaches the original with mysql -h hobobiker-copy-db (ddev mysql -h does not). Same shape as Part 2: always from a clean restore, never by hand-editing the target, so the run that goes green is reproducible. Configuration lives in git (config export or a recipe). Rehearsed: a fresh install and the Drupal 6 copy reloaded from .zst in 21 s, the whole pipeline in 38 s. Content types stay as on the original (triplog, blog...) rather than collapsing into one, as the audit suggests for a Drupal target.
 
 ---
 
@@ -153,10 +153,10 @@ The tests compare words, images and links; looks are a budget
 
 1. Stock theme, plus a documented allowlist
 2. A subtheme with the old CSS
-3. A full port: rarely worth it
+3. A full port: here, it was small
 
 Note:
-The kit's docs/theming-and-presentation.md. Run the semantic tier with no theme entries and count failures by category; that is what the theme costs. On randyfay.com a Bartik subtheme (about 100 lines of CSS, 7 templates) took the allowlist from 8 entries to 3. Today: start at step 1, go further only if time allows.
+The kit's docs/theming-and-presentation.md. Run the semantic tier with no theme entries and count failures by category; that is what the theme costs. On randyfay.com a Bartik subtheme (about 100 lines of CSS, 7 templates) took the allowlist from 8 entries to 3. Rehearsed: Olivero passed every word-and-link check and looked nothing like the site. The original theme was only about 880 lines (golden_hour plus hobo_golden), so it was ported: a stable9 theme whose templates produce the original's markup, so its CSS, images and menu script work unchanged. The layout tier then caught one thing a person might not: the trip day pages relied on Drupal 6 core's book.css. Visible and layout tiers: 4,905 of 4,905.
 
 ---
 
@@ -170,6 +170,18 @@ Every failure is one of:
 
 Note:
 Same rule as Part 2, with expected-differences.json entries scoped to the drupal11 target, exact (equals or anchored regex), each with a reason. An allowlist can hide real errors: on randyfay.com an entry that allowed every date line hid a 7-hour time zone mistake.
+
+---
+
+## Rehearsed this week
+
+* Rebuilt from nothing in **about 1 minute**
+* **10,669** checks pass, 0 fail
+* **11** declared differences, each with a reason
+* No PHP runs on the new site
+
+Note:
+2026-10-28, from a fresh Drupal 11 install: reset 21 s, pipeline 38 s, every tier of the suite 4 min 18 s (semantic 2,457, visible 2,455, layout 2,450, assets 1,781, stored 1,445, access 81). Declared: things Drupal 11 cannot store (an empty title, a comment on a deleted node), the rewritten PHP lines, /tripinfo (a PHP fatal error on the original), one view argument, an image link now an image style, and two self-links where a path has two aliases. Found on the way: the original printed dates at a fixed UTC-6 but filtered by America/Denver; three MP3 sizes capped at 8 MB in its files table; ties broken by table order. Checkpoints are tagged s3-import ... s3-rehearsal.
 
 ---
 
