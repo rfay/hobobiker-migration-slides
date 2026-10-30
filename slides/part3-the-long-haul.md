@@ -170,7 +170,7 @@ Same rule as Part 2, with expected-differences.json entries scoped to the drupal
 4. Decide: fix, or declare
 
 Note:
-Pre-baked checkpoints for the long steps (file copy, a full import). Whatever passes or fails at the end is the result. Tag: s3-d11-run. If time runs out, the rehearsed pipeline (hobobiker-d11 main, 2026-10-28): reset 21 s, pipeline 38 s, every tier 4 min 18 s, 10,669 pass, 0 fail (semantic 2,457, visible 2,455, layout 2,450, assets 1,781, stored 1,445, access 81), 11 declared differences: an empty title and a comment on a deleted node (Drupal 11 can't store them), the rewritten PHP lines, /tripinfo (a PHP fatal error on the original), one view argument, an image link now an image style, two self-links where a path has two aliases. Found on the way: the original printed dates at a fixed UTC-6 but filtered by America/Denver; three MP3 sizes capped at 8 MB in its files table; ties broken by table order.
+Pre-baked checkpoints for the long steps (file copy, a full import). Whatever passes or fails at the end is the result. Tag: s3-d11-run. If time runs out, the rehearsed pipeline (hobobiker-d11 main, 2026-10-28): reset 21 s, pipeline 38 s, every tier 4 min 18 s, 10,669 pass, 0 fail (semantic 2,457, visible 2,455, layout 2,450, assets 1,781, stored 1,445, access 81), 10 declared differences: an empty title and a comment on a deleted node (Drupal 11 can't store them), the rewritten PHP lines, /tripinfo (a PHP fatal error on the original), one view argument, an image link now an image style, two self-links where a path has two aliases. Found on the way: the original printed dates at a fixed UTC-6 but filtered by America/Denver; three MP3 sizes capped at 8 MB in its files table; ties broken by table order.
 
 ---
 
