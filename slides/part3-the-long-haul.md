@@ -138,12 +138,11 @@ The source here is a copy of the original's database in a second schema of the t
 
 ## Looks
 
-The tests compare words, images and links; looks are a budget
+The tests compare words, images and links and try for "shape" of page.
 
 1. Stock theme, plus a documented allowlist
 2. A subtheme with the old CSS
-3. A full port: here
-4. Try to validate D11 database content if done from script.
+3. Try to validate D11 database content if done from script.
 
 Note:
 The kit's docs/theming-and-presentation.md. Run the semantic tier with no theme entries and count failures by category; that is what the theme costs. On randyfay.com a Bartik subtheme (about 100 lines of CSS, 7 templates) took the allowlist from 8 entries to 3. Rehearsed: Olivero passed every word-and-link check and looked nothing like the site. The original theme was only about 880 lines (golden_hour plus hobo_golden), so it was ported: a stable9 theme whose templates produce the original's markup, so its CSS, images and menu script work unchanged. The layout tier then caught one thing a person might not: the trip day pages relied on Drupal 6 core's book.css. Visible and layout tiers: 4,905 of 4,905.
@@ -179,7 +178,7 @@ Pre-baked checkpoints for the long steps (file copy, a full import). Whatever pa
 
 * Archive: [static.hobobiker.com](https://static.hobobiker.com), from [rfay/hobobiker-static](https://github.com/rfay/hobobiker-static) · data: [hobobiker-assets v1.2](https://github.com/rfay/hobobiker-assets/releases/tag/v1.2)
 * Recaps on drupal.org: [Part 1](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-16-%E2%80%94-part-1-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-road-test-having-claude) · [Part 2](https://www.drupal.org/docs/develop/development-tools/ai-coding-tools-for-drupal-development/drupal-ai-learners-club-sessions/2026-10-23-%E2%80%94-part-2-hobobiker-rides-again-plan-it-test-it-migrate-it-%E2%80%94-the-last-ride-sending-a)
-* Live during the session: [original](https://hobobiker-copy--remotework--rfay.coder.ddev.com) · [Drupal 11](https://hobobiker-d11--remotework--rfay.coder.ddev.com)
+* Live during the session: [original](https://hobobiker-copy--remotework--rfay.coder.ddev.com) · [Drupal 11](https://hobobiker-d11--remotework--rfay.coder.ddev.com) · [Drupal11 from rehearsal](https://hobobiker-d11-rehearsed--remotework--rfay.coder.ddev.com)
 * [Drupal migrations from Drupal 6/7](https://www.drupal.org/docs/upgrading-drupal)
 * Site source: [github.com/rfay/hobobiker.com](https://github.com/rfay/hobobiker.com)
 * The kit: [github.com/rfay/site-migration-kit](https://github.com/rfay/site-migration-kit)
