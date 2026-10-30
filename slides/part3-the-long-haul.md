@@ -189,6 +189,22 @@ Pasted into a new Claude Code session in hobobiker-d11 on the live-start branch,
 
 ---
 
+## Followup: what the tests missed
+
+* Click a photo: the original opens a lightbox, Drupal 11 opened the bare image
+  * Same markup, no script. The tests don't click.
+* 168 comments shown that the original never showed (its comment module was off)
+  * Extra text passes: the tests check that the original's lines are there
+* 30 term descriptions with no text format: found by redoing a step with the Migrate API
+* Migrate skipped a term and reported "0 failed"
+
+Found by a person, or by a second method.
+
+Note:
+Live build, 2026-10-30. The lightbox: node/1335 on the original runs the Drupal 6 Lightbox2 module's lightbox.js on every rel="lightbox" link; the hobophoto filter on Drupal 11 printed the same rel="lightbox[group1][caption]" links, so every word, image and link check passed, but no script was loaded. Fixed by loading the original lightbox.js unchanged with a small adapter for Drupal 11 (jQuery 4 in noConflict mode, no $.browser, drupalSettings, behaviors as {attach}) and porting its caption route. Comments: the original stores 447 (169 published) with the comment module disabled, so it shows none; the import kept 446 and Drupal 11 displayed the 168 published ones. Now kept in the database (the stored tier checks them) and hidden: no comment field on the node display, no "access comments" permission. Term descriptions: setDescription() ignores a format argument; neither the tests nor validate() noticed, the Migrate version of step 30 did, and step 99 now checks for it. Migrate: term 31's parent has a higher tid, the parent's stub had no vocabulary, and the row was skipped with only a notice in the message table.
+
+---
+
 ## Resources
 
 * Archive: [static.hobobiker.com](https://static.hobobiker.com), from [rfay/hobobiker-static](https://github.com/rfay/hobobiker-static) · data: [hobobiker-assets v1.2](https://github.com/rfay/hobobiker-assets/releases/tag/v1.2)
