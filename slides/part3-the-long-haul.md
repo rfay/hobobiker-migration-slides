@@ -82,7 +82,7 @@ Everyone should upgrade. Zstandard dumps are smaller and much faster to compress
 * The same suite, with `MIGRATION_TARGET=drupal11`
 
 Note:
-Fresh install from the recommended project template. The original, hobobiker-copy, stays the reference; the D6 database to read from is a copy (hobobiker-prep, restored from the pristine snapshot), never the original.
+Fresh install from the recommended project template. The original, hobobiker-copy, stays the reference; the D6 database to read from is a copy of the sanitized snapshot, loaded into a second schema (d6) of the target's database, never the original.
 
 ---
 
@@ -124,7 +124,7 @@ The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 sour
 
 ## The pipeline
 
-1. **Restore** the D6 copy and a clean D11 (D6 database loaded )
+1. **Restore** the D6 copy and a clean D11 (D6 database loaded)
 2. **Configure**: types, fields, formats, from git
 3. **Import** content, comments, terms, files
 4. **Check** against the baseline
@@ -163,17 +163,6 @@ Same rule as Part 2, with expected-differences.json entries scoped to the drupal
 
 ---
 
-## Rehearsed this week
-
-* Rebuilt from nothing in **about 1 minute**
-* **10,669** checks pass, 0 fail
-* **11** declared differences, each with a reason
-
-Note:
-2026-10-28, from a fresh Drupal 11 install: reset 21 s, pipeline 38 s, every tier of the suite 4 min 18 s (semantic 2,457, visible 2,455, layout 2,450, assets 1,781, stored 1,445, access 81). Declared: things Drupal 11 cannot store (an empty title, a comment on a deleted node), the rewritten PHP lines, /tripinfo (a PHP fatal error on the original), one view argument, an image link now an image style, and two self-links where a path has two aliases. Found on the way: the original printed dates at a fixed UTC-6 but filtered by America/Denver; three MP3 sizes capped at 8 MB in its files table; ties broken by table order. Checkpoints are tagged s3-import ... s3-rehearsal.
-
----
-
 ## Today
 
 1. Onboard Claude: read the D6 source, write the plan
@@ -182,7 +171,7 @@ Note:
 4. Decide: fix, or declare
 
 Note:
-Pre-baked checkpoints for the long steps (file copy, a full import). Whatever passes or fails at the end is the result. Tag: s3-d11-run.
+Pre-baked checkpoints for the long steps (file copy, a full import). Whatever passes or fails at the end is the result. Tag: s3-d11-run. If time runs out, the rehearsed pipeline (hobobiker-d11 main, 2026-10-28): reset 21 s, pipeline 38 s, every tier 4 min 18 s, 10,669 pass, 0 fail (semantic 2,457, visible 2,455, layout 2,450, assets 1,781, stored 1,445, access 81), 11 declared differences: an empty title and a comment on a deleted node (Drupal 11 can't store them), the rewritten PHP lines, /tripinfo (a PHP fatal error on the original), one view argument, an image link now an image style, two self-links where a path has two aliases. Found on the way: the original printed dates at a fixed UTC-6 but filtered by America/Denver; three MP3 sizes capped at 8 MB in its files table; ties broken by table order.
 
 ---
 
