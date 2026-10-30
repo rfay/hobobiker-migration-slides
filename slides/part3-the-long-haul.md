@@ -174,6 +174,21 @@ Pre-baked checkpoints for the long steps (file copy, a full import). Whatever pa
 
 ---
 
+## The opening prompt
+
+What a fresh Claude gets today:
+
+* The owner's decisions, as requirements
+* What to read, then explore the D6 source
+* First deliverable: a plan, not code
+
+[PART3-PROMPT.md](https://github.com/rfay/hobobiker.com/blob/main/PART3-PROMPT.md)
+
+Note:
+Pasted into a new Claude Code session in hobobiker-d11 on the live-start branch, after scripts/00-reset.sh. The decisions are as I gave them, not the rehearsal's solutions; it is told not to look at the rehearsal (other branches, tags, PART3-PLAN.md), and the rehearsal's drupal11 declarations are hidden for the live build.
+
+---
+
 ## Resources
 
 * Archive: [static.hobobiker.com](https://static.hobobiker.com), from [rfay/hobobiker-static](https://github.com/rfay/hobobiker-static) · data: [hobobiker-assets v1.2](https://github.com/rfay/hobobiker-assets/releases/tag/v1.2)
