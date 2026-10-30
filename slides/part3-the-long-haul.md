@@ -25,13 +25,13 @@ Final local run of retire/run.sh, every tier, against the nginx-served archive (
 
 ## Confession 1: I changed the original
 
-* The maps were broken: a dead Google Maps key
+* The maps were broken: ancient, dead Google Maps key
 * **434** day maps, **13** route maps
-* Fixed on production: Leaflet + OpenStreetMap, no key
+* Fixed on production: Leaflet + OpenStreetMap, no key required
 * Baseline re-frozen to match
 
 Note:
-"Reproduce, don't repair" is the rule for the migration, but the owner can still fix the site itself. The Google key belonged to a project with no billing, so every map had been blank for years. 13 route maps had a second bug: a leftover debugging line put https://hobobiker.com/ in front of an absolute URL, so the KML never loaded. The repair is in the tripinfo module: each map is a div with a site-relative data-kml URL, drawn by Leaflet 1.9.4 with togeojson and JSZip, all served locally. Because the original changed on purpose, the old baseline no longer described it: re-frozen 2026-10-25, the old one stays in git history.
+"Reproduce, don't repair" is the rule for the migration, but I couldn't bear it. The Google key belonged to an unknown project with no billing, so every map had been blank for years. 13 route maps had a second bug: a leftover debugging line put https://hobobiker.com/ in front of an absolute URL, so the KML never loaded. The repair is in the tripinfo module: each map is a div with a site-relative data-kml URL, drawn by Leaflet 1.9.4 with togeojson and JSZip, all served locally. Because the original changed on purpose, the old baseline no longer described it: re-frozen 2026-10-25, the old one stays in git history.
 
 ---
 
@@ -39,20 +39,23 @@ Note:
 
 * Personal data in 3 map files: names, addresses, phone numbers
 * An AWS key, a dead Google key, SMTP and Flickr credentials
+* GitHub whined mightily about the Google Maps Key when it was in hundreds of pages of static.
 * Published in the archive repo and the data release
 * Revoked, deleted, and started over
 
 Note:
-The personal data: Warm Showers hosts and family contacts in XML files under files/maps, about 75 phone numbers. The credentials were in the variable table and, the worst one, an AWS access key inside a Backup and Migrate destination URL. drush sql-sanitize only scrubs users, not these. All of it was public in rfay/hobobiker-static and in hobobiker-assets v1.0 and v1.1. What it took: rotate the AWS key and delete the old one, delete the Flickr app and every credential variable, delete both GitHub repos, remove the files from production. Then a sanitized snapshot with a gate that searches every table and file for keys, a re-frozen baseline, a secrets gate in the static pipeline, and the whole archive rebuilt, retested (11,679 pass, 0 fail) and redeployed. The data is now hobobiker-assets v1.2. Lesson: the audit has to look at every table, not just users and variables.
+The personal data: WarmShowers hosts and family contacts in XML files under files/maps, about 75 phone numbers. The credentials were in the variable table and, the worst one, an AWS access key inside a Backup and Migrate destination URL. drush sql-sanitize only scrubs users, not these. All of it was public in rfay/hobobiker-static and in hobobiker-assets v1.0 and v1.1. What it took: rotate the AWS key and delete the old one, delete the Flickr app and every credential variable, delete both GitHub repos, remove the files from production. Then a sanitized snapshot with a gate that searches every table and file for keys, a re-frozen baseline, a secrets gate in the static pipeline, and the whole archive rebuilt, retested (11,679 pass, 0 fail) and redeployed. The data is now hobobiker-assets v1.2. Lesson: the audit has to look at every table, not just users and variables.
 
 ---
 
 ## Confession 3: I didn't design the tests
 
-Part 1's prompt asked for a plan and a way to test it
+Somebody asked last week "What if you just told Claude to do it and gave no guidance?"
+
+Part 1's prompt asked for a plan and a way to test it, but I didn't figure out the tests
 
 * Claude proposed the tiers and built them
-* I reviewed them; I never specified them
+* I sort-of reviewed them; I never specified them
 
 Note:
 Last week's question: "What if you just asked Claude to do this without the tests?" It would do something, and say it was done. Without a check, "done" is the agent's word; with the baseline, it is a count anyone can rerun. Part 1's recap on drupal.org is linked on the last slide.
@@ -107,26 +110,12 @@ From the frozen baseline (data/manifest.json, baseline/stored.json, re-frozen 20
 
 ---
 
-## The hard parts
-
-Content made at render time, not stored:
-
-* **15** pages run PHP
-* **15** route tables from `tripinfo`
-* **119** pages with `[hobophoto:]` macros
-* **13** Flash pages, broken already
-
-Note:
-Counts are the baseline's tags. The site is frozen, so one-time answers are fine: flatten the tripinfo tables to HTML once (the audit's recommendation), and either recreate a small hobophoto filter or expand the macros to markup. Flash stays as broken as it is on the original: reproduce, don't repair. The baseline already holds the rendered output of all of these, so the suite tells us whether the answer worked. Rehearsed: no PHP runs on Drupal 11. Every PHP block was one call, tripinfo_table('START','END'); the import rewrites it to [tripinfo:START,END], a text filter in a small custom module. The photo macros stay in the stored text and a Drupal 11 filter plugin renders them with the original's markup.
-
----
-
 ## Two ways to move content
 
 * **Migrate API**: core's `d6_*` plugins, YAML, rollback
 * **A rerunnable script**: read the D6 copy, write entities, keep IDs
 
-Either is fine: the tests judge the result, not the method
+Both should work. We'll see what Claude does.
 
 Note:
 The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 source and long, staged migrations. A script suits one cutover and odd content; randyfay.com went that way (126 nodes, 670 comments, 33 files in about 8 seconds). No 6-to-7-to-8 upgrade chain either way. Which one we use comes out of the plan. Rehearsed with scripts, as on randyfay.com: the original ids kept, so node/N and every alias still work.
@@ -135,12 +124,12 @@ The kit's docs/rebuild-approaches.md. Migrate API suits a standard Drupal 6 sour
 
 ## The pipeline
 
-1. **Restore** the D6 copy and a clean D11
+1. **Restore** the D6 copy and a clean D11 (D6 database loaded )
 2. **Configure**: types, fields, formats, from git
 3. **Import** content, comments, terms, files
 4. **Check** against the baseline
 
-Every step a script, every script prints a count
+Every step is a script.
 
 Note:
 The source here is a copy of the original's database in a second schema of the target's database. Reading the source directly works too, and is common: DDEV projects share a network, so the target's web container reaches the original with mysql -h hobobiker-copy-db (ddev mysql -h does not). Same shape as Part 2: always from a clean restore, never by hand-editing the target, so the run that goes green is reproducible. Configuration lives in git (config export or a recipe). Rehearsed: a fresh install and the Drupal 6 copy reloaded from .zst in 21 s, the whole pipeline in 38 s. Content types stay as on the original (triplog, blog...) rather than collapsing into one, as the audit suggests for a Drupal target.
@@ -153,7 +142,8 @@ The tests compare words, images and links; looks are a budget
 
 1. Stock theme, plus a documented allowlist
 2. A subtheme with the old CSS
-3. A full port: here, it was small
+3. A full port: here
+4. Try to validate D11 database content if done from script.
 
 Note:
 The kit's docs/theming-and-presentation.md. Run the semantic tier with no theme entries and count failures by category; that is what the theme costs. On randyfay.com a Bartik subtheme (about 100 lines of CSS, 7 templates) took the allowlist from 8 entries to 3. Rehearsed: Olivero passed every word-and-link check and looked nothing like the site. The original theme was only about 880 lines (golden_hour plus hobo_golden), so it was ported: a stable9 theme whose templates produce the original's markup, so its CSS, images and menu script work unchanged. The layout tier then caught one thing a person might not: the trip day pages relied on Drupal 6 core's book.css. Visible and layout tiers: 4,905 of 4,905.
@@ -169,7 +159,7 @@ Every failure is one of:
 * A deliberate change: declare it, `target: drupal11`
 
 Note:
-Same rule as Part 2, with expected-differences.json entries scoped to the drupal11 target, exact (equals or anchored regex), each with a reason. An allowlist can hide real errors: on randyfay.com an entry that allowed every date line hid a 7-hour time zone mistake.
+Same rule as Part 2, with expected-differences.json entries scoped to the drupal11 target, exact (equals or anchored regex), each with a reason.
 
 ---
 
@@ -178,7 +168,6 @@ Same rule as Part 2, with expected-differences.json entries scoped to the drupal
 * Rebuilt from nothing in **about 1 minute**
 * **10,669** checks pass, 0 fail
 * **11** declared differences, each with a reason
-* No PHP runs on the new site
 
 Note:
 2026-10-28, from a fresh Drupal 11 install: reset 21 s, pipeline 38 s, every tier of the suite 4 min 18 s (semantic 2,457, visible 2,455, layout 2,450, assets 1,781, stored 1,445, access 81). Declared: things Drupal 11 cannot store (an empty title, a comment on a deleted node), the rewritten PHP lines, /tripinfo (a PHP fatal error on the original), one view argument, an image link now an image style, and two self-links where a path has two aliases. Found on the way: the original printed dates at a fixed UTC-6 but filtered by America/Denver; three MP3 sizes capped at 8 MB in its files table; ties broken by table order. Checkpoints are tagged s3-import ... s3-rehearsal.
